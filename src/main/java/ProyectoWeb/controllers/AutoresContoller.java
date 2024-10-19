@@ -7,11 +7,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import ProyectoWeb.models.AutoresModel;
+
 /**
  * Servlet implementation class AutoresContoller
  */
 public class AutoresContoller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	AutoresModel modelo = new AutoresModel();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -20,7 +23,33 @@ public class AutoresContoller extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
+    
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
+    	
+    	if(request.getParameter("op")==null) {
+    		//listar()
+    		return;
+    	}
+    	
+    	String operacion = request.getParameter("op");
+    	switch(operacion) {
+    	case: "listar":
+    		//listar()
+    		break;
+    	case: "nuevo":
+    		//nuevo()
+    		break;
+    	}
+    }
+    
+    private void pruebaParaGit() {
+    	public int tp;
+    }
 
+    private void listar(HttpServletRequest request, HttpServletResponse response) {
+    	request.setAttribute("listaAutores", modelo.listarAutores());
+    	request.getRequestDispatcher("/autores/listaAutores.jsp")
+    }
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
