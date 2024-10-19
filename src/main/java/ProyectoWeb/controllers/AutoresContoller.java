@@ -42,9 +42,6 @@ public class AutoresContoller extends HttpServlet {
     	}
     }
     
-    private void pruebaParaGit() {
-    	public int tp;
-    }
 
     private void listar(HttpServletRequest request, HttpServletResponse response) {
     	request.setAttribute("listaAutores", modelo.listarAutores());
