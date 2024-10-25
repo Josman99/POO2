@@ -8,6 +8,16 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 
+
+</head>
+<body>
+
+<% 
+String url="http://localhost:8080/proyectoWebGB/";
+%>
+
+<a type="button" href="<%=url%>AutoresController?op=nuevo">Nuevo autor</a>
+
 <table border="1">
 <thead>
 	<tr>
@@ -53,11 +63,6 @@ List<Autor> listaAutores = (List<Autor>)request.getAttribute("listaAutores");
 
 </tbody>
 </table>
-
-</head>
-<body>
-
-bienvenido !!!!
 
 </body>
 </html>
