@@ -52,4 +52,24 @@ public class AutoresModel  extends Conexion{
 		}
 	}
 	
+	public int insertarAutor(Autor autor) {
+		try {
+			int filasAfectadas=0;
+			String sql="CALL sp_insertarAutor(?,?)";
+			this.abrirConexion();
+			cs = conexion.prepareCall(sql);
+			//cs.setInt(1, autor.getIdAutor());
+			cs.setString(1, autor.getNombre());
+			cs.setString(2, autor.getNacionalidad());
+			filasAfectadas=cs.executeUpdate();
+			return filasAfectadas;
+			
+		} catch (Exception e) {
+			System.out.println("error en: "+e.getMessage());
+			this.cerrarConexion();
+			return 0;
+		}
+
+	}
+	
 }

@@ -50,19 +50,14 @@ public class AutoresController extends HttpServlet {
 			}
 			
 			break;
+		case "ingresar":
+			insertar(request, response);
+			break;
 
 		}
 	}
 
 	private void listar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		/*request.setAttribute("listaAutores", modelo);
-		Iterator<Autor> it = modelo.listarAutores().iterator();
-		while(it.hasNext()) {
-			Autor a =it.next();
-			System.out.println(a.getIdAutor()+" "
-					+a.getNacionalidad()+" "
-					+a.getNombre());
-		}*/
 		try {
 			request.setAttribute("listaAutores", modelo.listarAutores());
 			Iterator<Autor> it = modelo.listarAutores().iterator();
@@ -76,6 +71,26 @@ public class AutoresController extends HttpServlet {
 			java.util.logging.Logger.getLogger(AutoresController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		request.getRequestDispatcher("/autores/listaAutores.jsp").forward(request, response);
+	}
+	
+	private void insertar(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			Autor miautor = new Autor();
+			//miautor.setIdAutor(Integer.parseInt(request.getParameter("codigo")));
+			miautor.setNombre(request.getParameter("nombre"));
+			miautor.setNacionalidad(request.getParameter("nacionalidad"));
+			
+			if(modelo.insertarAutor(miautor)>0) {
+				request.getSession().setAttribute("exito", "Autor registrado exitosamente");
+				response.sendRedirect(request.getContextPath()+"/AutoresController?op=listar");
+			} else {
+				request.getSession().setAttribute("Fracaso", "Autor no registrado ya que hay otro autor con ese codigo ");
+				response.sendRedirect(request.getContextPath()+"/AutoresController?op=listar");
+			}
+		} catch (Exception e) {
+			System.out.println("error en ingresear: "+e.getMessage());
+		}
+		
 	}
 
 	/**
