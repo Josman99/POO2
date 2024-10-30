@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mysql.cj.x.protobuf.MysqlxNotice.Warning.Level;
+import com.mysql.cj.xdevapi.Statement;
 import com.unu.proyectoWebGB.beans.*;
 import com.unu.proyectoWebGB.controllers.AutoresController;
 
@@ -16,16 +17,6 @@ public class AutoresModel  extends Conexion{
 
 	CallableStatement cs;
 	ResultSet rs;
-	
-	/*
-	public List<Autor> listarAutores(){
-		
-		ArrayList<Autor> autores = new ArrayList<>();
-		autores.add(new Autor(1,"García Marquez", "Colombiana"));
-		autores.add(new Autor(2,"Borges", "Argentina"));
-		autores.add(new Autor(3,"Allende", "Chilena"));
-		return autores;
-	}*/
 	
 	public List<Autor> listarAutores() throws SQLException{
 		try {
@@ -70,6 +61,89 @@ public class AutoresModel  extends Conexion{
 			return 0;
 		}
 
+	}
+	
+	public int modificarrAutor(Autor autor) {
+		try {
+			int filasAfectadas=0;
+			String sql="CALL sp_modificarAutor(?,?,?)";
+			this.abrirConexion();
+			cs = conexion.prepareCall(sql);
+			cs.setInt(1, autor.getIdAutor());
+			cs.setString(2, autor.getNombre());
+			cs.setString(3, autor.getNacionalidad());
+			filasAfectadas=cs.executeUpdate();
+			this.cerrarConexion();
+			return filasAfectadas;
+			
+		} catch (Exception e) {
+			System.out.println("error en: "+e.getMessage());
+			this.cerrarConexion();
+			return 0;
+		}
+
+	}
+	
+	public Autor obtenerAutor(int idautor) {
+		Autor autor = new Autor();
+		try {
+			String sql = "CALL sp_obtenerAutor(?)";
+			this.abrirConexion();
+			cs = conexion.prepareCall(sql);
+			cs.setInt(1, idautor);
+			rs = cs.executeQuery();
+			if(rs.next()) {
+				
+				autor.setIdAutor(rs.getInt("id_autor"));
+				autor.setNombre(rs.getString("nombre_autor"));
+				autor.setNacionalidad(rs.getString("nacionalidad_autor"));
+				this.cerrarConexion();
+				return autor;
+			}
+		} catch (Exception e) {
+			this.cerrarConexion();
+			return null;
+		}
+		return autor;
+		
+	}
+	
+	public int eliminarAutor(int id)  {
+		try {
+			int filasEliminadas=0;
+			String sql = "CALL sp_eliminarAutor(?)";
+			this.abrirConexion();
+			cs = conexion.prepareCall(sql);
+			cs.setInt(1, id);
+			filasEliminadas=cs.executeUpdate();
+			this.cerrarConexion();
+			return filasEliminadas;
+			
+		} catch (Exception e) {
+			System.out.println("no se puede elimi¿ar: "+e.getMessage());
+			return 0;
+		}
+	}
+	
+	public int totalAutores() throws SQLException {
+		try {
+			int totalaut = 0;
+			String sql = "SELECT COUNT(id_autor) as totalaut FROM autor";
+			this.abrirConexion();
+			cs = conexion.prepareCall(sql);
+			rs = cs.executeQuery();
+
+			while (rs.next()) {
+				totalaut = rs.getInt("totalaut");
+			}
+			return totalaut;
+			
+		} catch (Exception e) {
+			System.out.println("error al contar autores: "+e.getMessage());
+			return 0;
+		} finally {
+			this.cerrarConexion();
+		}
 	}
 	
 }
