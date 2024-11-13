@@ -9,7 +9,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.System.Logger;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 
 import com.unu.proyectoWebGB.beans.Autor;
@@ -68,6 +70,28 @@ public class AutoresController extends HttpServlet {
 
 		}
 	}
+	
+	private boolean validar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	boolean res = false;
+    	List<String> ListError = new ArrayList<>();
+    	try {
+			if(request.getParameter("nombre").equals("")) {
+				res = true;
+				ListError.add("Ingrese el nombre del autor");
+			}
+			if(request.getParameter("nacionalidad").equals("")) {
+				res = true;
+				ListError.add("Ingrese la nacionalidad del autor");
+			}
+			request.setAttribute("respuesta", res);
+			request.setAttribute("listaError", ListError);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.getStackTrace();
+		}
+    	
+    	return res;
+    }
 
 	private void listar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
@@ -88,18 +112,25 @@ public class AutoresController extends HttpServlet {
 	
 	private void insertar(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			Autor miautor = new Autor();
-			//miautor.setIdAutor(Integer.parseInt(request.getParameter("codigo")));
-			miautor.setNombre(request.getParameter("nombre"));
-			miautor.setNacionalidad(request.getParameter("nacionalidad"));
-			
-			if(modelo.insertarAutor(miautor)>0) {
-				request.getSession().setAttribute("exito", "Autor registrado exitosamente");
-				response.sendRedirect(request.getContextPath()+"/AutoresController?op=listar");
+			if(!validar(request, response)) {
+				
+				Autor miautor = new Autor();
+				//miautor.setIdAutor(Integer.parseInt(request.getParameter("codigo")));
+				miautor.setNombre(request.getParameter("nombre"));
+				miautor.setNacionalidad(request.getParameter("nacionalidad"));
+				
+				if(modelo.insertarAutor(miautor)>0) {
+					request.getSession().setAttribute("exito", "Autor registrado exitosamente");
+					response.sendRedirect(request.getContextPath()+"/AutoresController?op=listar");
+				} else {
+					request.getSession().setAttribute("Fracaso", "Autor no registrado ya que hay otro autor con ese codigo ");
+					response.sendRedirect(request.getContextPath()+"/AutoresController?op=listar");
+				}
+				
 			} else {
-				request.getSession().setAttribute("Fracaso", "Autor no registrado ya que hay otro autor con ese codigo ");
-				response.sendRedirect(request.getContextPath()+"/AutoresController?op=listar");
+				request.getRequestDispatcher("/autores/nuevoAutor.jsp").forward(request, response);
 			}
+			
 		} catch (Exception e) {
 			System.out.println("error en ingresear: "+e.getMessage());
 		}

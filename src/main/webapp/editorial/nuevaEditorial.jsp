@@ -1,3 +1,4 @@
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -9,14 +10,38 @@
 <title>AUTORES</title>
 </head>
 <body>
+<script>
+ function validarFormulario() {
+	const nombre = document.getElementById('nombre').value.trim();
+	const contacto = document.getElementById('contacto').value.trim();
+	const telefono = document.getElementById('telefono').value.trim();
+	
+	if(nombre === ''){
+		alert('Ingrese nombre de editorial');
+		document.getElementById('nombre').focus();
+		return false;
+	}
+	if(contacto === ''){
+		alert('Ingrese contacto de editorial');
+		document.getElementById('nacionalidad').focus();
+		return false;
+	}
+	if(telefono === ''){
+		alert('Ingrese telefono de editorial');
+		document.getElementById('nacionalidad').focus();
+		return false;
+	}
+	return true;
+}
+</script>
+
+<%@ include file='/cabeceraMenu.jsp' %> 
 
 <div class="container">
-	<% 
-	String url="http://localhost:8080/proyectoWebGB/";
-	%>
+
 	
 	<h3>Nueva Editorial</h3>
-	<form role="form" action="<%=url%>EditorialController?op=ingresar" method="POST">
+	<form role="form" action="<%=url%>EditorialController?op=ingresar" method="POST" onsubmit="return validarFormulario()">
 	
 	<input type="hidden" name="op" value="insertar">
 	
@@ -38,8 +63,22 @@
 	<a href="<%=url%>EditorialController?op=listar">Volver</a>
 	
 	</form>
-	
 </div>
+
+<%
+	if(request.getAttribute("respuesta") !=null) {
+		boolean res = (boolean) request.getAttribute("respuesta");
+		if(res){
+			List<String> listaError = (List<String>) request.getAttribute("listaError");
+			for(String error : listaError) {
+				%>
+<span><%=error %></span>	
+<br>	
+			<%			
+			}
+		}
+	}
+%>
 
 
 

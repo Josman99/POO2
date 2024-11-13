@@ -10,7 +10,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 
 import javax.management.modelmbean.ModelMBeanOperationInfo;
@@ -65,6 +67,31 @@ public class EditorialController extends HttpServlet {
     	
     	
     }
+    
+    private boolean validar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	boolean res = false;
+    	List<String> ListError = new ArrayList<>();
+    	try {
+			if(request.getParameter("nombre").equals("")) {
+				res = true;
+				ListError.add("Ingrese el nombre de la editorial");
+			}
+			if(request.getParameter("contacto").equals("")) {
+				res = true;
+				ListError.add("Ingrese el contacto de la editorial");
+			}
+			if(request.getParameter("telefono").equals("")) {
+				res = true;
+				ListError.add("Ingrese el telefono de la editorial");
+			}
+			request.setAttribute("respuesta", res);
+			request.setAttribute("listaError", ListError);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.getStackTrace();
+		}
+    	return res;
+    }
 
     private void listar(HttpServletRequest request, HttpServletResponse response) {
     	try {
@@ -82,19 +109,24 @@ public class EditorialController extends HttpServlet {
     
     private void insertar(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			Editorial mieditorial = new Editorial();
-			//miautor.setIdAutor(Integer.parseInt(request.getParameter("codigo")));
-			mieditorial.setNombreEditorial(request.getParameter("nombre"));
-			mieditorial.setContactoEditorial(request.getParameter("contacto"));
-			mieditorial.setTelefonoEditorial(request.getParameter("telefono"));
-			
-			if(modelo.insertarEditorial(mieditorial)>0) {
-				request.getSession().setAttribute("exito", "Autor registrado exitosamente");
-				response.sendRedirect(request.getContextPath()+"/EditorialController?op=listar");
-			} else {
-				request.getSession().setAttribute("Fracaso", "Autor no registrado ya que hay otro autor con ese codigo ");
-				response.sendRedirect(request.getContextPath()+"/EditorialController?op=listar");
+			if(!validar(request, response)) {
+				Editorial mieditorial = new Editorial();
+				//miautor.setIdAutor(Integer.parseInt(request.getParameter("codigo")));
+				mieditorial.setNombreEditorial(request.getParameter("nombre"));
+				mieditorial.setContactoEditorial(request.getParameter("contacto"));
+				mieditorial.setTelefonoEditorial(request.getParameter("telefono"));
+				
+				if(modelo.insertarEditorial(mieditorial)>0) {
+					request.getSession().setAttribute("exito", "Autor registrado exitosamente");
+					response.sendRedirect(request.getContextPath()+"/EditorialController?op=listar");
+				} else {
+					request.getSession().setAttribute("Fracaso", "Autor no registrado ya que hay otro autor con ese codigo ");
+					response.sendRedirect(request.getContextPath()+"/EditorialController?op=listar");
+				}
+			}else {
+				request.getRequestDispatcher("/editorial/nuevaEditorial.jsp").forward(request, response);
 			}
+			
 		} catch (Exception e) {
 			System.out.println("error en ingresear: "+e.getMessage());
 		}

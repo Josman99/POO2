@@ -29,4 +29,24 @@
     <servlet-name>EditorialController</servlet-name>
     <url-pattern>/EditorialController</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GeneroController</display-name>
+    <servlet-name>GeneroController</servlet-name>
+    <servlet-class>com.unu.proyectoWebGB.controllers.GeneroController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GeneroController</servlet-name>
+    <url-pattern>/GeneroController</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>LibrosController</display-name>
+    <servlet-name>LibrosController</servlet-name>
+    <servlet-class>com.unu.proyectoWebGB.controllers.LibrosController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LibrosController</servlet-name>
+    <url-pattern>/LibrosController</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -1,6 +1,6 @@
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,48 +10,48 @@
 <title>Insert title here</title>
 </head>
 <body>
+
 <script>
  function validarFormulario() {
 	const nombre = document.getElementById('nombre').value.trim();
-	const nacionalidad = document.getElementById('nacionalidad').value.trim();
+	const descripcion = document.getElementById('descripcion').value.trim();
 	
 	if(nombre === ''){
-		alert('Ingrese nombre del autor');
+		alert('Ingrese nombre de genero');
 		document.getElementById('nombre').focus();
 		return false;
 	}
-	if(nacionalidad === ''){
-		alert('Ingrese nacionalidad del autor');
-		document.getElementById('nacionalidad').focus();
+	if(descripcion === ''){
+		alert('Ingrese descripcion de genero');
+		document.getElementById('nombre').focus();
 		return false;
 	}
-	return true;
+
 }
 </script>
 
 <%@ include file='/cabeceraMenu.jsp' %> 
 
-
 	<div class="container">
-		<h3>Nuevo Autor</h3>
-		<form role="form" action="<%=url%>AutoresController?op=ingresar"
-			method="POST" onsubmit="return validarFormulario()">
+		<h3>Nuevo Genero</h3>
+		<form role="form" action="<%=url%>GeneroController?op=ingresar" method="POST" onsubmit="return validarFormulario()">
 
 			<div class="mb-3">
-				<label for="" class="form-label">Nombre del autor:</label> 
+				<label for="" class="form-label">Nombre del genero:</label> 
 				<input type="text" class="form-control" name="nombre" id="nombre" placeholder="NOMBRE">
 			</div>
 			<div class="mb-3">
-				<label for="" class="form-label">Nacionalidad:</label>
-				<input type="text" class="form-control" name="nacionalidad" id="nacionalidad" placeholder="NACIONALIDAD">
+				<label for="" class="form-label">Descripcion:</label>
+				<input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="DESCRIPCION">
 			</div>
 
 			<input type="submit" value="guardar" name="guardar"><br>
 
-			<a href="<%=url%>AutoresController?op=listar">Volver</a>
+			<a href="<%=url%>GeneroController?op=listar">Volver</a>
 
 		</form>
 	</div>
+
 <%
 	if(request.getAttribute("respuesta") !=null) {
 		boolean res = (boolean) request.getAttribute("respuesta");
@@ -65,8 +65,7 @@
 			}
 		}
 	}
-%>
-
-
+%>	
+	
 </body>
 </html>

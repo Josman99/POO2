@@ -105,7 +105,6 @@ public class AutoresModel  extends Conexion{
 			return null;
 		}
 		return autor;
-		
 	}
 	
 	public int eliminarAutor(int id)  {

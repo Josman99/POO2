@@ -19,19 +19,15 @@ function eliminar(id) {
 	if(confirm("¿Desea eliminar el rgistro?")==true){
 		location.href = "AutoresController?op=eliminar&id="+id;
 	}
-
 }
 
 </script>
-
-	
 	
 </head>
 <body>
+<%@ include file='/cabeceraMenu.jsp' %> 
 
-	<%
-	String url = "http://localhost:8080/proyectoWebGB/";
-	%>
+
 
 	<div class="container">
 		<a type="button" href="<%=url%>AutoresController?op=nuevo">Nuevo

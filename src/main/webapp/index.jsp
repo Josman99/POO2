@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<%@ include file='/cabeceraMenu.jsp' %>
 hola
 </body>
 </html>

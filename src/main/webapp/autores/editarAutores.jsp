@@ -14,8 +14,8 @@
 <body>
 
 <div class="container">
+<%@ include file='/cabeceraMenu.jsp' %> ;
 	<%
-	String url = "http://localhost:8080/proyectoWebGB/";
 	Autor autor;
 	HttpSession sesion = request.getSession();
 	if (request.getAttribute("autor") == null) {
